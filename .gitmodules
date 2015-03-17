@@ -1,0 +1,6 @@
+[submodule "challoc"]
+	path = challoc
+	url = git@github.com:Timdawson264/challoc.git
+[submodule "Cuckoo-hash"]
+	path = Cuckoo-hash
+	url = git@github.com:kroki/Cuckoo-hash.git

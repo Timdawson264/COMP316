@@ -1,0 +1,243 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 36.90     42.99    42.99                             cuckoo_hash_insert
+ 24.56     71.60    28.61 411600952     0.00     0.00  puzzle_state_new_blank
+ 19.63     94.47    22.87 411600872     0.00     0.00  puzzle_state_move_hole
+  6.89    102.49     8.02 345097963     0.00     0.00  list_fifo_pop
+  3.47    106.53     4.04                             hashlittle2
+  2.14    109.03     2.49 411600872     0.00     0.00  puzzle_state_new_expand
+  1.70    111.00     1.98 345097923     0.00     0.00  list_fifo_push
+  1.10    112.28     1.28 411600952     0.00     0.00  my_malloc
+  0.96    113.40     1.12 102900218     0.00     0.00  puzzle_expand_node
+  0.88    114.42     1.02       40     0.03     1.72  puzzle_solve_bi_search
+  0.69    115.22     0.80 156174002     0.00     0.00  add_state_to_ht
+  0.47    115.77     0.55 411600952     0.00     0.00  my_free
+  0.39    116.23     0.45                             cuckoo_hash_next
+  0.08    116.32     0.10       40     0.00     0.00  cuckoo_hash_count
+  0.07    116.41     0.09                             cuckoo_hash_remove
+  0.07    116.49     0.08                             print_puzzle_state_bi
+  0.05    116.54     0.06                             puzzle_state_unmove_hole
+  0.04    116.59     0.05       40     0.00     0.00  print_puzzle_state
+  0.03    116.63     0.04       40     0.00     0.00  list_fifo_init
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+ 
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this 
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2014 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.01% of 116.63 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     59.1    0.00   68.92                 main [1]
+                1.02   67.85      40/40          puzzle_solve_bi_search [2]
+                0.05    0.00      40/40          print_puzzle_state [19]
+                0.00    0.00      80/411600952     puzzle_state_new_blank [6]
+-----------------------------------------------
+                1.02   67.85      40/40          main [1]
+[2]     59.1    1.02   67.85      40         puzzle_solve_bi_search [2]
+                1.12   57.31 102900218/102900218     puzzle_expand_node [3]
+                8.02    0.00 345097963/345097963     list_fifo_pop [8]
+                0.80    0.07 156174002/156174002     add_state_to_ht [12]
+                0.39    0.00 291824259/411600952     my_free [13]
+                0.10    0.00      40/40          cuckoo_hash_count [15]
+                0.04    0.00      40/40          list_fifo_init [20]
+                0.00    0.00      80/345097923     list_fifo_push [10]
+-----------------------------------------------
+                1.12   57.31 102900218/102900218     puzzle_solve_bi_search [2]
+[3]     50.1    1.12   57.31 102900218         puzzle_expand_node [3]
+                2.49   52.84 411600872/411600872     puzzle_state_new_expand [4]
+                1.98    0.00 345097843/345097923     list_fifo_push [10]
+-----------------------------------------------
+                2.49   52.84 411600872/411600872     puzzle_expand_node [3]
+[4]     47.4    2.49   52.84 411600872         puzzle_state_new_expand [4]
+               28.61    1.28 411600872/411600952     puzzle_state_new_blank [6]
+               22.87    0.00 411600872/411600872     puzzle_state_move_hole [7]
+                0.09    0.00 66503029/411600952     my_free [13]
+-----------------------------------------------
+                                                 <spontaneous>
+[5]     36.9   42.99    0.00                 cuckoo_hash_insert [5]
+-----------------------------------------------
+                0.00    0.00      80/411600952     main [1]
+               28.61    1.28 411600872/411600952     puzzle_state_new_expand [4]
+[6]     25.6   28.61    1.28 411600952         puzzle_state_new_blank [6]
+                1.28    0.00 411600952/411600952     my_malloc [11]
+-----------------------------------------------
+               22.87    0.00 411600872/411600872     puzzle_state_new_expand [4]
+[7]     19.6   22.87    0.00 411600872         puzzle_state_move_hole [7]
+-----------------------------------------------
+                8.02    0.00 345097963/345097963     puzzle_solve_bi_search [2]
+[8]      6.9    8.02    0.00 345097963         list_fifo_pop [8]
+-----------------------------------------------
+                                                 <spontaneous>
+[9]      3.5    4.04    0.00                 hashlittle2 [9]
+-----------------------------------------------
+                0.00    0.00      80/345097923     puzzle_solve_bi_search [2]
+                1.98    0.00 345097843/345097923     puzzle_expand_node [3]
+[10]     1.7    1.98    0.00 345097923         list_fifo_push [10]
+-----------------------------------------------
+                1.28    0.00 411600952/411600952     puzzle_state_new_blank [6]
+[11]     1.1    1.28    0.00 411600952         my_malloc [11]
+-----------------------------------------------
+                0.80    0.07 156174002/156174002     puzzle_solve_bi_search [2]
+[12]     0.7    0.80    0.07 156174002         add_state_to_ht [12]
+                0.07    0.00 53273664/411600952     my_free [13]
+-----------------------------------------------
+                0.07    0.00 53273664/411600952     add_state_to_ht [12]
+                0.09    0.00 66503029/411600952     puzzle_state_new_expand [4]
+                0.39    0.00 291824259/411600952     puzzle_solve_bi_search [2]
+[13]     0.5    0.55    0.00 411600952         my_free [13]
+-----------------------------------------------
+                                                 <spontaneous>
+[14]     0.4    0.45    0.00                 cuckoo_hash_next [14]
+-----------------------------------------------
+                0.10    0.00      40/40          puzzle_solve_bi_search [2]
+[15]     0.1    0.10    0.00      40         cuckoo_hash_count [15]
+-----------------------------------------------
+                                                 <spontaneous>
+[16]     0.1    0.09    0.00                 cuckoo_hash_remove [16]
+-----------------------------------------------
+                                                 <spontaneous>
+[17]     0.1    0.08    0.00                 print_puzzle_state_bi [17]
+-----------------------------------------------
+                                                 <spontaneous>
+[18]     0.0    0.06    0.00                 puzzle_state_unmove_hole [18]
+-----------------------------------------------
+                0.05    0.00      40/40          main [1]
+[19]     0.0    0.05    0.00      40         print_puzzle_state [19]
+-----------------------------------------------
+                0.04    0.00      40/40          puzzle_solve_bi_search [2]
+[20]     0.0    0.04    0.00      40         list_fifo_init [20]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2014 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [12] add_state_to_ht         [8] list_fifo_pop           [2] puzzle_solve_bi_search
+  [15] cuckoo_hash_count (/home/tim/src/COMP316/Cuckoo-hash/src/cuckoo_hash.h) [10] list_fifo_push [7] puzzle_state_move_hole
+   [5] cuckoo_hash_insert     [13] my_free                 [6] puzzle_state_new_blank
+  [14] cuckoo_hash_next       [11] my_malloc               [4] puzzle_state_new_expand
+  [16] cuckoo_hash_remove     [19] print_puzzle_state     [18] puzzle_state_unmove_hole
+   [9] hashlittle2            [17] print_puzzle_state_bi
+  [20] list_fifo_init          [3] puzzle_expand_node
