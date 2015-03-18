@@ -1,18 +1,23 @@
 cmake_minimum_required (VERSION 2.6)
 project (comp316)
 
-set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-mavx2 -pg -ggdb -O3") 
+set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-mavx2 -std=gnu99 -pg -ggdb -O3") 
 add_definitions(-DCHUNK_MALLOC)
 
 ########################################################################
 # Build utility
 ########################################################################
-add_executable(n-waypuzzle n-waypuzzle.c list_fifo.c challoc/challoc.c)
+add_executable(n-waypuzzle
+    n-waypuzzle.c
+    list_fifo.c
+    challoc/challoc.c
+    Cuckoo-hash/src/cuckoo_hash.c
+    Cuckoo-hash/src/lookup3.c
+)
 
 target_link_libraries(n-waypuzzle
     m
     pthread
-    ${CMAKE_SOURCE_DIR}/Cuckoo-hash/src/.libs/libcuckoo_hash.a
 )
 
 
