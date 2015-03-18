@@ -5,6 +5,7 @@
 #include <tgmath.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <time.h>
 
 //chunk allocator
 #include "challoc/challoc.h"
@@ -41,7 +42,7 @@ typedef struct __attribute__((__packed__)) puzzle_state{
   uint8_t board[]; //the current array of the pieaces TODO:BitPack Board
 } puzzle_state_t;
 
-
+size_t num_states; //tracks the total number of states generated
 size_t memusage; //tracks memory usage in bytes
 ChunkAllocator * chunkalloc;
 
@@ -145,6 +146,7 @@ puzzle_state_t * puzzle_state_new_blank(){
   }
 
   new_state->move = MOVE_INVALID;
+  num_states++;
   return new_state;
 }
 
@@ -239,10 +241,45 @@ void puzzle_expand_node(puzzle_state_t * state, list_fifo_t * lst){
   
 }
 
-void puzzle_solve_bi_search(puzzle_state_t * state_inital, puzzle_state_t * state_goal){
+size_t depth_of_solution(puzzle_state_t * state, struct cuckoo_hash * HT){
+  size_t depth;
+  puzzle_state_t * state_from_ht;
+  puzzle_state_t * prev;
+  struct cuckoo_hash_item * itm;
+  
+  /* Find the state still in the hash table, this state is the same as "state"*/
+  itm = cuckoo_hash_lookup(HT, state->board, PUZZLE_SIZE2);
+  state_from_ht = itm->value;
+  
+  depth=0;
+  prev=state;
+
+  while(prev && prev->move!=MOVE_INVALID){/* ie not root node */
+    depth++;
+    puzzle_state_unmove_hole(prev->move, prev);/* unmove to find perent node */
+    itm = cuckoo_hash_lookup(HT, prev->board, PUZZLE_SIZE2);
+    if(!itm) return 0;
+    prev=itm->value;
+  }
+
+  prev=state_from_ht;
+  while(prev && prev->move!=MOVE_INVALID){/* ie not root node */
+    depth++;
+    puzzle_state_unmove_hole(prev->move, prev);/* unmove to find perent node */
+    itm = cuckoo_hash_lookup(HT, prev->board, PUZZLE_SIZE2);
+    if(!itm) return 0;
+    prev=itm->value;
+  }
+
+  return depth;
+}
+
+void puzzle_solve_bi_search(puzzle_state_t * state_inital, puzzle_state_t * state_goal, time_t start_time){
   int res;
+  size_t depth;
   struct cuckoo_hash hash;
   puzzle_state_t * state_tmp;
+  puzzle_state_t * state_in_ht;
   if( cuckoo_hash_init(&hash, 8) == false ) exit(1);
 
   list_fifo_t * expand_lst = list_fifo_init(); //nodes to be expanded
@@ -254,20 +291,27 @@ void puzzle_solve_bi_search(puzzle_state_t * state_inital, puzzle_state_t * stat
   add_state_to_ht(&hash, state_goal);//add solution so it can be found
   
   list_fifo_push(expand_lst, state_inital);
-  list_fifo_push(expand_lst, state_goal);
+  list_fifo_push(expand_lst, state_goal); //should add to a stack based search -- ie iter depth first
 
-  while(1){
+  //while less then 3 minutes
+  while( difftime(time(NULL), start_time) < (60*3) ){
     //get next state to expand
     state_tmp = list_fifo_pop(expand_lst);
     //Check State
     res = add_state_to_ht(&hash, state_tmp);
+    //time check after this op
+    if( difftime(time(NULL), start_time) > (60*3) ) break;
+
     if(res == 0) continue; //dont expand this node as this node is not valid
     if(res == 1) puzzle_expand_node(state_tmp, expand_lst);
     
     if(res == -1){
       //Solution
       //state_tmp is here but the equivilant state is in hash table need to join states and count moves
-      fprintf(stderr, "Found Solution - num nodes: %u\n",cuckoo_hash_count(&hash));
+      //fprintf(stderr, "Found Solution - num nodes: %u\n",cuckoo_hash_count(&hash));
+      depth = depth_of_solution(state_tmp, &hash);
+      fprintf(stderr,"Solved - generated %u states, Time: %.0f seconds, Depth of solution %u\n", num_states, difftime(time(NULL), start_time), depth );
+
       puzzle_state_delete(state_tmp);
       break;
     }
@@ -292,7 +336,7 @@ void puzzle_solve_bi_search(puzzle_state_t * state_inital, puzzle_state_t * stat
 int main(int argc, char ** argv){
   int i;
   char puzzle_name[256];
-   
+  time_t start_time, end_time;
   puzzle_state_t * state_inital;
   puzzle_state_t * state_final;
 
@@ -318,11 +362,13 @@ int main(int argc, char ** argv){
       fscanf(puzzle_sets_f, "%hhu", &state_inital->board[i]);
     }
     //Solve Puzzle
-    fprintf(stderr,"%s\n", puzzle_name );
+    fprintf(stderr,"\n%s\n", puzzle_name );
     print_puzzle_state(state_inital, stderr);
     memusage=0;
-    puzzle_solve_bi_search(state_inital, state_final);
-    fprintf(stderr,"End %s, Used: %.2fMb\n", puzzle_name, (float)memusage/(float)(1024*1024));
+    num_states=0;
+    start_time = time(NULL);
+    puzzle_solve_bi_search(state_inital, state_final, start_time);
+    end_time = time(NULL);
     
   }
   
