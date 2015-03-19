@@ -1,24 +1,18 @@
-cmake_minimum_required (VERSION 2.6)
-project (comp316)
-
-set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-mavx2 -std=gnu99 -pg -ggdb -O3") 
-add_definitions(-DCHUNK_MALLOC)
-
-########################################################################
-# Build utility
-########################################################################
-add_executable(n-waypuzzle
-    n-waypuzzle.c
-    list_fifo.c
-    challoc/challoc.c
-    Cuckoo-hash/src/cuckoo_hash.c
-    Cuckoo-hash/src/lookup3.c
-)
-
-target_link_libraries(n-waypuzzle
-    m
-    pthread
-)
+cmake_minimum_required(VERSION 2.6)
+project (COMP316)
+ 
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR})
+ 
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+ 
+#et(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+ 
+#include_directories("${PROJECT_INCLUDE_DIR}")
+#include_directories("${PROJECT_SOURCE_DIR}")
+ 
+add_subdirectory(Bi_Directional_Search)
+#add_subdirectory(project2)
 
 
 IF (UNIX)
@@ -33,6 +27,7 @@ IF (UNIX)
    core core.*
    gmon.out
    *~
+   CMakeFiles
   )
   
   ADD_CUSTOM_COMMAND(
@@ -42,5 +37,5 @@ IF (UNIX)
     ARGS    -Rf CMakeTmp ${DISTCLEANED}
     TARGET  distclean
   )
+  
 ENDIF(UNIX)
-

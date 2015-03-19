@@ -1,6 +1,6 @@
 [submodule "challoc"]
-	path = challoc
+	path = Bi_Directional_Search/challoc
 	url = git@github.com:Timdawson264/challoc.git
 [submodule "Cuckoo-hash"]
-	path = Cuckoo-hash
+	path = Bi_Directional_Search/Cuckoo-hash
 	url = git@github.com:kroki/Cuckoo-hash.git
