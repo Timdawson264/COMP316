@@ -11,6 +11,8 @@ extern "C" {
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
+//chunk allocator
+#include "challoc/challoc.h"
 
 typedef struct __attribute__((__packed__)) list_fifo_node{
 
@@ -20,7 +22,9 @@ typedef struct __attribute__((__packed__)) list_fifo_node{
 } list_fifo_node_t;
 
 typedef struct __attribute__((__packed__)){
-
+  #ifdef CHUNK_MALLOC_LIST
+    ChunkAllocator * allocator;//chunk allocator if used
+  #endif
   list_fifo_node_t * head; //pop - remove from head
   list_fifo_node_t * tail; //push - add to tail
 

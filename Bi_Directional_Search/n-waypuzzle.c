@@ -150,19 +150,16 @@ puzzle_state_t * puzzle_state_new_blank(){
   return new_state;
 }
 
-puzzle_state_t * puzzle_state_new_expand(puzzle_state_t * old_state, enum puzzle_move_e dir){
-  puzzle_state_t * new_state;
-  new_state = puzzle_state_new_blank();
+uint8_t puzzle_state_move(puzzle_state_t * new_state, puzzle_state_t * old_state, enum puzzle_move_e dir){
 
   memcpy(new_state->board, old_state->board, PUZZLE_SIZE2); //Clone state
   new_state->search = old_state->search; //set nodes search direction
   
   if( puzzle_state_move_hole(dir, new_state) ){
     new_state->move=dir;
-    return new_state;
+    return 1;
   }else{
-    puzzle_state_delete(new_state);
-    return NULL;
+    return 0;
   }
 }
 
@@ -224,20 +221,29 @@ int add_state_to_ht(struct cuckoo_hash * HT, puzzle_state_t * state){
 }
 
 void puzzle_expand_node(puzzle_state_t * state, list_fifo_t * lst){
-  puzzle_state_t * tmp;
+  puzzle_state_t * tmp = puzzle_state_new_blank();
   
   //Generate new state that has moved
-  tmp = puzzle_state_new_expand(state, MOVE_UP);
-  if(tmp) list_fifo_push(lst, tmp);
+  if( puzzle_state_move(tmp, state, MOVE_UP) ){
+    list_fifo_push(lst, tmp);
+    tmp = puzzle_state_new_blank();
+  }
   
-  tmp = puzzle_state_new_expand(state, MOVE_DOWN);
-  if(tmp) list_fifo_push(lst, tmp);
+  if(puzzle_state_move(tmp, state, MOVE_DOWN) ){
+    list_fifo_push(lst, tmp);
+    tmp = puzzle_state_new_blank();
+  }
+  if( puzzle_state_move(tmp, state, MOVE_LEFT) ){
+    list_fifo_push(lst, tmp);
+    tmp = puzzle_state_new_blank();
+  }
   
-  tmp = puzzle_state_new_expand(state, MOVE_LEFT);
-  if(tmp) list_fifo_push(lst, tmp);
-  
-  tmp = puzzle_state_new_expand(state, MOVE_RIGHT);
-  if(tmp) list_fifo_push(lst, tmp);
+  if(puzzle_state_move(tmp, state, MOVE_RIGHT)){
+    list_fifo_push(lst, tmp);
+  }else{
+    //if last move doesnt use tmp it must be removed from memory
+    puzzle_state_delete(tmp);
+  }
   
 }
 
