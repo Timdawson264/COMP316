@@ -90,6 +90,7 @@ def DPLL(Clauses, Symbols, Model):
       unitPropagate(Clause, Symbols, Model)
       return DPLL(Clauses, Symbols.copy(), Model.copy())
 
+
   if len(Symbols)==0:
     return False
   l = Symbols.pop(0)

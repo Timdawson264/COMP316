@@ -1,0 +1,16 @@
+3d: 
+meeting: 
+spam: 3d meeting 
+business: spam 
+george: spam 
+lab: spam george meeting 
+hp: spam lab business 
+internet: spam 3d business hp 
+dollarsign: spam business internet 
+000: spam dollarsign 
+1999: hp 3d 000 
+receive: spam 000 internet 1999 
+remove: spam receive 
+free: spam receive 1999 
+edu: spam receive george hp 
+squarebracket: george 1999 edu 
